@@ -1,0 +1,22 @@
+{
+  "name": "employee_dashboard_server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/DDinoBox/employee_dashboard.git",
+  "author": "DDinoBox <dinobox.create@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "dbmate": "^2.16.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.0"
+  }
+}
