@@ -14,6 +14,24 @@ const getEmployeeList = async (page, limit, dep_no, search_date) => {
   }
 };
 
+const getEmployeeTurnoverDetails = async (search_date) => {
+  try {
+    const formattedDate = new Date(search_date);
+    formattedDate.setFullYear(formattedDate.getFullYear() - 1);
+    formattedDate.setDate(1);
+    const twelveMonthsAgo = formattedDate.toISOString().slice(0, 10);
+
+    const [joinEmployeeDetails, leftEmployeeDetails] = await Promise.all([
+      employeeDao.getJoinEmployeeDetails(search_date, twelveMonthsAgo),
+      employeeDao.getLeaveEmployeeDetails(search_date, twelveMonthsAgo)
+    ]);
+    return [joinEmployeeDetails, leftEmployeeDetails];
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default { 
-  getEmployeeList
+  getEmployeeList,
+  getEmployeeTurnoverDetails
 };

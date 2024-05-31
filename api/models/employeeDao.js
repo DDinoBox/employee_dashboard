@@ -59,7 +59,64 @@ const getEmployeeDetailsByDept = async (offset, limit, dept_no, search_date) => 
   }
 };
 
+const getJoinEmployeeDetails = async (search_date) => {
+  try {
+    const joinEmployees = await dataSource.query(
+      `
+      SELECT 
+        emp_no,
+        first_name,
+        last_name,
+        gender,
+        DATE_FORMAT(birth_date, '%Y-%m-%d') AS birth_date,
+        DATE_FORMAT(hire_date, '%Y-%m-%d') AS hire_date
+      FROM 
+        employees
+      WHERE 
+        DATE_FORMAT(hire_date, '%Y-%m') = DATE_FORMAT(?, '%Y-%m')
+      ORDER BY 
+        hire_date;
+      `,
+      [search_date]
+    );
+    return joinEmployees;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getLeaveEmployeeDetails = async (search_date) => {
+  try {
+    const leftEmployeeDetails = await dataSource.query(
+      `
+      SELECT
+        e.emp_no,
+        e.first_name,
+        e.last_name,
+        e.gender,
+        DATE_FORMAT(e.birth_date, '%Y-%m-%d') AS birth_date,
+        DATE_FORMAT(de.to_date, '%Y-%m-%d') AS leave_date
+      FROM
+        employees e
+      JOIN
+        dept_emp de ON e.emp_no = de.emp_no
+      WHERE 
+        DATE_FORMAT(de.to_date, '%Y-%m') = DATE_FORMAT(?, '%Y-%m')
+        AND de.to_date <> '9999-01-01'
+      ORDER BY
+        de.to_date;
+      `,
+      [search_date]
+    );
+    return leftEmployeeDetails;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getTotalEmployeesByDept,
-  getEmployeeDetailsByDept
+  getEmployeeDetailsByDept,
+  getJoinEmployeeDetails,
+  getLeaveEmployeeDetails
 };

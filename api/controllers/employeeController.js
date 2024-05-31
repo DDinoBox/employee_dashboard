@@ -7,6 +7,13 @@ const getEmployeeList = catchAsync(async (req, res) => {
   res.status(200).json({ data: employeeList, totalPages });
 });
 
+const getEmployeeTurnoverDetails = catchAsync(async (req, res) => {
+  const { search_date = '1993-01-31' } = req.query;
+  const [ joinedEmployees, leftEmployees ] = await employeeService.getEmployeeTurnoverDetails(search_date);
+  res.status(200).json({ joinedEmployees, leftEmployees });
+});
+
 export default {
-  getEmployeeList
+  getEmployeeList,
+  getEmployeeTurnoverDetails
 };
